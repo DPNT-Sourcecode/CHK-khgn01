@@ -26,7 +26,7 @@ def checkout(skus):
 
     # apply multi offers
     for item, offers in multi_offers.items():
-        for offer_count, offer_price in sorted(offers, key=lambda x: -x[1]/x[0]):
+        for offer_count, offer_price in sorted(offers, key=lambda x: x[0], reverse=True):
             if counts[item] >= offer_count:
                 total_price += (counts[item] // offer_count) * offer_price
                 counts[item] %= offer_count 
@@ -35,4 +35,5 @@ def checkout(skus):
         total_price += count * price_table[item]
     
     return total_price
+
 
