@@ -54,22 +54,25 @@ def checkout(skus):
                 counts[item] %= offer_count 
     
     # group offers
-    for group_name, (required_qty, group_price, items) in group_offers.items():
-        group_count = sum(counts[item] for item in items)
-        while group_count >= required_qty:
-            total_price += group_price
-            group_count -= required_qty
-            
-            for item in items:
-                while group_count < required_qty and counts[item] > 0:
-                    counts[item] -= 1
-                    group_count += 1
+    def apply_group_discount(group_items, group_price):
+        group_counts = [counts[item] for item in group_items]
+        min_count = min(group_counts)
+        total_group_price = min_count * group_price
+        for item in group_items:
+            counts[item] -= min_count
+        return total_group_price
+
+    for group_name, (required_qty, group_price, group_items) in group_offers.items():
+        group_counts = [counts[item] for item in group_items]
+        while min(group_counts) >= required_qty:
+            total_price += apply_group_discount(group_items, group_price)
             
 
     for item, count in counts.items():
         total_price += count * price_table[item]
     
     return total_price
+
 
 
 
