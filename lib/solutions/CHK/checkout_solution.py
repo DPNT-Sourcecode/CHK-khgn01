@@ -23,6 +23,9 @@ def checkout(skus):
     }
     free_offers = {'E':(2, 'B'), 'F': (2, 'F'), 'N':(3, 'M'), 'R': (3,'Q'), 'U':(3, 'U')}
 
+
+    group_offers = {'g1': (3, 45, ['S', 'T', 'X', 'Y', 'Z'])}
+
     for char in skus:
         if char not in price_table:
             return -1
@@ -54,3 +57,4 @@ def checkout(skus):
         total_price += count * price_table[item]
     
     return total_price
+
