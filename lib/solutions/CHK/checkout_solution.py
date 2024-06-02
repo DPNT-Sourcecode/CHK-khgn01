@@ -52,18 +52,20 @@ def checkout(skus):
             total_price += (group_count // required_qty) * group_price
             remaining_items = group_count % required_qty
 
-            # Distribute remaining items back to their counts
+         
+            sorted_items = sorted(items, key=lambda x: price_table[x], reverse=True)
+
             remaining_counts = {}
-            for item in items:
+            for item in sorted_items:
                 remaining_counts[item] = counts[item]
-            
+
             for _ in range(group_count - remaining_items):
-                for item in items:
+                for item in sorted_items:
                     if remaining_counts[item] > 0:
                         remaining_counts[item] -= 1
                         break
 
-            # Update counts after applying group discount
+            # update counts after applying group discount
             for item in items:
                 counts[item] = remaining_counts[item]
 
