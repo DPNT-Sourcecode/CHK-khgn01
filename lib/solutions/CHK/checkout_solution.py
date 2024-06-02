@@ -5,9 +5,9 @@
 def checkout(skus):
 
     # create prices and offers
-    price_table = {'A': 50, 'B':30, 'C':20, 'D': 15, 'E': 40}
+    price_table = {'A': 50, 'B':30, 'C':20, 'D': 15, 'E': 40, 'F': 10}
     multi_offers = {'A':[(3,130), (5,200)], 'B':[(2,45)]}
-    free_offers = {'E':(2, 'B')}
+    free_offers = {'E':(2, 'B'), 'F': (2, 'F')}
 
     for char in skus:
         if char not in price_table:
@@ -20,9 +20,14 @@ def checkout(skus):
 
     # do free offers first
     for item, (required_qty, free_item) in free_offers.items():
-        if counts[item] >= required_qty:
-            free_qty = (counts[item] // required_qty)
-            counts[free_item] = max(0, counts[free_item] - free_qty)
+        if item == free_item:
+            if counts[item] >= required_qty + 1:
+                free_qty = (counts[item] // (required_qty + 1))
+                counts[item] -= free_qty
+        else:
+            if counts[item] >= required_qty:
+                free_qty = (counts[item] // required_qty)
+                counts[free_item] = max(0, counts[free_item] - free_qty)
 
     # apply multi offers
     for item, offers in multi_offers.items():
@@ -35,5 +40,6 @@ def checkout(skus):
         total_price += count * price_table[item]
     
     return total_price
+
 
 
