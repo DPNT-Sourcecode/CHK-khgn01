@@ -57,7 +57,7 @@ def checkout(skus):
             for item in items:
                 remaining_counts[item] = counts[item]
             
-            for _ in range(remaining_items):
+            for _ in range(group_count - remaining_items):
                 for item in items:
                     if remaining_counts[item] > 0:
                         remaining_counts[item] -= 1
