@@ -52,9 +52,32 @@ def checkout(skus):
             if counts[item] >= offer_count:
                 total_price += (counts[item] // offer_count) * offer_price
                 counts[item] %= offer_count 
+    
+    # group offers
+    for group_name, (required_qty, group_price, items) in group_offers.items():
+        group_count = sum(counts[item] for item in items)
+        if group_count >= required_qty:
+            total_price += (group_count // required_qty) * group_price
+            remaining_items = group_count % required_qty
+
+            # create remaining items and add them back to their counts
+            remaining_counts = {}
+            for item in items:
+                remaining_counts[item] = counts[item]
+            
+            for _ in range(remaining_items):
+                for item in items:
+                    if remaining_counts[item] > 0:
+                        remaining_counts[item] -= 1
+                        break
+            
+            # update counts after discount applied
+            for item in items:
+                counts[item] = remaining_counts[item]
 
     for item, count in counts.items():
         total_price += count * price_table[item]
     
     return total_price
+
 
