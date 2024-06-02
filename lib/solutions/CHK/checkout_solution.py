@@ -6,7 +6,7 @@ def checkout(skus):
 
     # create prices and offers
     price_table = {'A': 50, 'B':30, 'C':20, 'D': 15, 'E': 40}
-    multi_offers = {'A':[(3,130), (5,200)], 'B':(2,45)}
+    multi_offers = {'A':[(3,130), (5,200)], 'B':[(2,45)]}
     free_offers = {'E':(2, 'B')}
 
     for char in skus:
@@ -35,3 +35,4 @@ def checkout(skus):
         total_price += count * price_table[item]
     
     return total_price
+
