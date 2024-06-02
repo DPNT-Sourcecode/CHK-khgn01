@@ -45,15 +45,7 @@ def checkout(skus):
             if counts[item] >= required_qty:
                 free_qty = (counts[item] // required_qty)
                 counts[free_item] = max(0, counts[free_item] - free_qty)
-
-    # apply multi offers
-    for item, offers in multi_offers.items():
-        for offer_count, offer_price in sorted(offers, key=lambda x: x[0], reverse=True):
-            if counts[item] >= offer_count:
-                total_price += (counts[item] // offer_count) * offer_price
-                counts[item] %= offer_count 
     
-    # group offers
     for group_name, (required_qty, group_price, items) in group_offers.items():
         group_count = sum(counts[item] for item in items)
         if group_count >= required_qty:
@@ -74,6 +66,16 @@ def checkout(skus):
             # Update counts after applying group discount
             for item in items:
                 counts[item] = remaining_counts[item]
+
+    # apply multi offers
+    for item, offers in multi_offers.items():
+        for offer_count, offer_price in sorted(offers, key=lambda x: x[0], reverse=True):
+            if counts[item] >= offer_count:
+                total_price += (counts[item] // offer_count) * offer_price
+                counts[item] %= offer_count 
+    
+    # group offers
+    
             
 
     for item, count in counts.items():
